@@ -113,7 +113,13 @@ func buildConfig(enabledCipherSuites string) (*tls.Config, error) {
 func buildClientConfig(enabledCipherSuites string) (*tls.Config, error) {
 	// At the moment, we don't apply any extra settings on top of the generic
 	// config for client contexts
-	return buildConfig(enabledCipherSuites)
+	config, err := buildConfig(enabledCipherSuites)
+	config.Renegotiation = tls.RenegotiateFreelyAsClient
+	if err != nil {
+		return nil, err
+	}
+	//return buildConfig(enabledCipherSuites)
+	return config, nil
 }
 
 // buildServerConfig builds a tls.Config for servers
