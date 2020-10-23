@@ -106,6 +106,7 @@ func buildConfig(enabledCipherSuites string) (*tls.Config, error) {
 		PreferServerCipherSuites: true,
 		MinVersion:               tls.VersionTLS12,
 		CipherSuites:             suites,
+		Renegotiation: tls.RenegotiateFreelyAsClient,
 	}, nil
 }
 
@@ -131,7 +132,7 @@ func buildServerConfig(enabledCipherSuites string) (*tls.Config, error) {
 
 	// Require client cert by default
 	config.ClientAuth = tls.RequireAndVerifyClientCert
-
+	config.Renegotiation = tls.RenegotiateFreelyAsClient
 	// P-256/X25519 have an ASM implementation, others do not (at least on x86-64).
 	config.CurvePreferences = []tls.CurveID{
 		tls.X25519,
